@@ -4,14 +4,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/simulations")
 public class SimulationController {
 
-    @GetMapping("/hardcoded")
+    @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> getHardcodedSimulation() {
 
         // 🔹 Subobjeto "customer"
@@ -45,4 +47,69 @@ public class SimulationController {
 
         return ResponseEntity.ok(response);
     }
+
+    // 🔹 Nuevo endpoint para listar simulaciones por customerId
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<Map<String, Object>>> getSimulationsByCustomerId(@PathVariable Integer customerId) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        List<Map<String, Object>> simulations = new ArrayList<>();
+
+        // Simulación 1
+        Map<String, Object> s1 = new LinkedHashMap<>();
+        s1.put("simulationId", 1);
+        s1.put("customerId", customerId);
+        s1.put("loanAmount", 10000);
+        s1.put("interestRate", 5.5);
+        s1.put("termMonths", 24);
+        s1.put("installment", 440);
+        s1.put("accepted", true);
+        s1.put("simulationDate", LocalDateTime.of(2024, 1, 15, 18, 30, 45).format(formatter));
+
+        // Simulación 2
+        Map<String, Object> s2 = new LinkedHashMap<>();
+        s2.put("simulationId", 2);
+        s2.put("customerId", customerId);
+        s2.put("loanAmount", 20000);
+        s2.put("interestRate", 5.5);
+        s2.put("termMonths", 24);
+        s2.put("installment", 440);
+        s2.put("accepted", true);
+        s2.put("simulationDate", LocalDateTime.of(2024, 1, 16, 18, 30, 45).format(formatter));
+
+        // Simulación 3
+        Map<String, Object> s3 = new LinkedHashMap<>();
+        s3.put("simulationId", 3);
+        s3.put("customerId", customerId);
+        s3.put("loanAmount", 30000);
+        s3.put("interestRate", 5.5);
+        s3.put("termMonths", 24);
+        s3.put("installment", 440);
+        s3.put("accepted", true);
+        s3.put("simulationDate", LocalDateTime.of(2024, 1, 17, 18, 30, 45).format(formatter));
+
+        simulations.add(s1);
+        simulations.add(s2);
+        simulations.add(s3);
+
+        return ResponseEntity.ok(simulations);
+    }
+
+    @GetMapping("/customer/{customerId}/latest")
+    public ResponseEntity<Map<String, Object>> getLatestSimulationByCustomerId(@PathVariable Integer customerId) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        Map<String, Object> latestSimulation = new LinkedHashMap<>();
+        latestSimulation.put("simulationId", 3);
+        latestSimulation.put("customerId", customerId);
+        latestSimulation.put("loanAmount", 30000);
+        latestSimulation.put("interestRate", 5.5);
+        latestSimulation.put("termMonths", 24);
+        latestSimulation.put("installment", 440);
+        latestSimulation.put("accepted", true);
+        latestSimulation.put("simulationDate", LocalDateTime.of(2024, 1, 17, 18, 30, 45).format(formatter));
+
+        return ResponseEntity.ok(latestSimulation);
+    }
+
 }
