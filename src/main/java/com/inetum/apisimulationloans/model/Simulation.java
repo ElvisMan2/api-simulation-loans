@@ -29,5 +29,6 @@ public class Simulation {
     private Client client;
 
     @OneToOne
+    @JoinColumn(name = "loan_id")
     private Loan loan;
 }

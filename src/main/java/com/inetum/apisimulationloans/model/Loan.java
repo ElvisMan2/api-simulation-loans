@@ -28,8 +28,7 @@ public class Loan {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToOne(mappedBy ="loan", cascade = CascadeType.ALL, orphanRemoval = false)
-    @JoinColumn(name = "simulation_id")
+    @OneToOne(mappedBy = "loan")
     private Simulation simulation;
 
     @OneToMany(mappedBy ="loan", cascade = CascadeType.ALL, orphanRemoval = true)
