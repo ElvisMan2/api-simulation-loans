@@ -20,9 +20,11 @@ public class Simulation {
     private String currency;
     private Double interestRate;
     private Integer term; // months
-    private Double installment;
-    private Boolean acceptance;
-    private LocalDateTime simulationDate;
+
+    private Double installment;//se calcula segun loanAmaunt, currency, interesRate y term
+    private Double totalPayment;
+    private Boolean acceptance;// true si el installment menor que el 50% del ingreso mensual del cliente
+    private LocalDateTime simulationDate;//fecha y hora de la simulacion
 
     @ManyToOne
     @JoinColumn(name = "client_id")

@@ -1,5 +1,12 @@
 package com.inetum.apisimulationloans.controller;
 
+import com.inetum.apisimulationloans.dto.LoanSimulationRequest;
+import com.inetum.apisimulationloans.dto.LoanSimulationResponse;
+import com.inetum.apisimulationloans.dto.SimulationDTO;
+import com.inetum.apisimulationloans.model.Client;
+import com.inetum.apisimulationloans.service.ClientService;
+import com.inetum.apisimulationloans.service.LoanSimulationService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
@@ -13,7 +20,8 @@ import java.util.Map;
 @RequestMapping("/simulations")
 public class SimulationController {
 
-    @PostMapping("/create")
+    //Endpoints hardcodeados:
+    @PostMapping("/create")//harcoded
     public ResponseEntity<Map<String, Object>> getHardcodedSimulation() {
 
         // 🔹 Subobjeto "customer"
@@ -48,8 +56,7 @@ public class SimulationController {
         return ResponseEntity.ok(response);
     }
 
-    // 🔹 Nuevo endpoint para listar simulaciones por customerId
-    @GetMapping("/customer/{customerId}")
+    @GetMapping("/customer/{customerId}")//hardcoded
     public ResponseEntity<List<Map<String, Object>>> getSimulationsByCustomerId(@PathVariable Integer customerId) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
@@ -95,7 +102,7 @@ public class SimulationController {
         return ResponseEntity.ok(simulations);
     }
 
-    @GetMapping("/customer/{customerId}/latest")
+    @GetMapping("/customer/{customerId}/latest")//hardcoded
     public ResponseEntity<Map<String, Object>> getLatestSimulationByCustomerId(@PathVariable Integer customerId) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
@@ -110,6 +117,33 @@ public class SimulationController {
         latestSimulation.put("simulationDate", LocalDateTime.of(2024, 1, 17, 18, 30, 45).format(formatter));
 
         return ResponseEntity.ok(latestSimulation);
+    }
+
+    //Endpoints reales
+
+    //inyeccion de dependencias:
+    private final ClientService clientService;
+    private final LoanSimulationService loanSimulationService;
+
+    public SimulationController(ClientService clientService, LoanSimulationService loanSimulationService) {
+        this.clientService = clientService;
+        this.loanSimulationService = loanSimulationService;
+    }
+
+    @PostMapping("/client/{clientId}")
+    public ResponseEntity<SimulationDTO> simulateLoanAndSave(
+            @PathVariable Long clientId,
+            @Valid @RequestBody LoanSimulationRequest request) {
+
+        Client client = clientService.getClientByIdOrThrow(clientId);
+        SimulationDTO response = loanSimulationService.simulateAndSave(client, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<SimulationDTO>> getSimulationsByClientId(@PathVariable Long clientId) {
+        List<SimulationDTO> simulations = loanSimulationService.getSimulationsByClientId(clientId);
+        return ResponseEntity.ok(simulations);
     }
 
 }

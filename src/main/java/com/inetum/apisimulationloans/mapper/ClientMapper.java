@@ -16,5 +16,16 @@ public class ClientMapper {
         client.setCreationDate(LocalDateTime.now());
         return client;
     }
+
+    public static ClientDTO toDto(Client client) {
+        ClientDTO dto = new ClientDTO();
+        dto.setFirstName(client.getFirstName());
+        dto.setPaternalLastName(client.getPaternalLastName());
+        dto.setMaternalLastName(client.getMaternalLastName());
+        dto.setCurrencyOfIncome(client.getCurrencyOfIncome());
+        dto.setMonthlyIncome(client.getMonthlyIncome());
+        return dto;
+    }
+
 }
 
