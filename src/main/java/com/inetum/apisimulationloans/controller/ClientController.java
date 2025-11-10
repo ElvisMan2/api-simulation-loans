@@ -21,13 +21,10 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
-        try {
-            ClientDTO clientDTO = clientService.getClientById(id);
-            return ResponseEntity.ok(clientDTO);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
-        }
+        ClientDTO clientDTO = clientService.getClientById(id);
+        return ResponseEntity.ok(clientDTO);
     }
+
 
 
     @PostMapping

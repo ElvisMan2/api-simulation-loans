@@ -1,6 +1,7 @@
 package com.inetum.apisimulationloans.service;
 
 import com.inetum.apisimulationloans.dto.ClientDTO;
+import com.inetum.apisimulationloans.exception.ClientNotFoundException;
 import com.inetum.apisimulationloans.mapper.ClientMapper;
 import com.inetum.apisimulationloans.model.Client;
 import com.inetum.apisimulationloans.repository.ClientRepository;
@@ -27,8 +28,10 @@ public class ClientService {
 
     public ClientDTO getClientById(Long id) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Client not found with id: " + id));
-        return ClientMapper.toDto(client); // Agrega metodo toDto si aún no está
+                .orElseThrow(() -> new ClientNotFoundException(id));
+
+        // Aquí usamos el mapper existente
+        return ClientMapper.toDto(client);
     }
 
     public Client getClientByIdOrThrow(Long id) {
