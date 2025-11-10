@@ -8,7 +8,10 @@ import com.inetum.apisimulationloans.repository.ClientRepository;
 import com.inetum.apisimulationloans.repository.SimulationRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -36,11 +39,17 @@ public class LoanSimulationService {
 
         double numerator = monthlyRate * Math.pow(1 + monthlyRate, term);
         double denominator = Math.pow(1 + monthlyRate, term) - 1;
-        double monthlyPayment = loanAmount * (numerator / denominator);
-        double totalPayment = monthlyPayment * term;
+        double rawMonthlyPayment = loanAmount * (numerator / denominator);
+        double rawTotalPayment = rawMonthlyPayment * term;
+
+        // Redondeo con BigDecimal
+        BigDecimal monthlyPayment = BigDecimal.valueOf(rawMonthlyPayment)
+                .setScale(2, RoundingMode.HALF_UP);
+        BigDecimal totalPayment = BigDecimal.valueOf(rawTotalPayment)
+                .setScale(2, RoundingMode.HALF_UP);
 
         double maxAffordable = client.getMonthlyIncome() * 0.4;
-        boolean approved = monthlyPayment <= maxAffordable;
+        boolean approved = monthlyPayment.doubleValue() <= maxAffordable;
 
         // Guardar en base de datos
         Simulation sim = new Simulation();
@@ -48,10 +57,10 @@ public class LoanSimulationService {
         sim.setCurrency(request.getCurrency());
         sim.setInterestRate(annualRate);
         sim.setTerm(term);
-        sim.setInstallment(monthlyPayment);
-        sim.setTotalPayment(totalPayment);
+        sim.setInstallment(monthlyPayment.doubleValue());
+        sim.setTotalPayment(totalPayment.doubleValue());
         sim.setAcceptance(approved);
-        sim.setSimulationDate(LocalDateTime.now());
+        sim.setSimulationDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         sim.setClient(client);
 
         Simulation saved = simulationRepository.save(sim);
@@ -71,7 +80,6 @@ public class LoanSimulationService {
 
         return dto;
     }
-
     public List<SimulationDTO> getSimulationsByClientId(Long clientId) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new NoSuchElementException("Client not found with ID: " + clientId));
