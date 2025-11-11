@@ -80,6 +80,7 @@ public class LoanSimulationService {
 
         return dto;
     }
+
     public List<SimulationDTO> getSimulationsByClientId(Long clientId) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new NoSuchElementException("Client not found with ID: " + clientId));

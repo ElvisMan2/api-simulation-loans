@@ -14,24 +14,28 @@ import java.util.NoSuchElementException;
 @Service
 public class ClientService {
 
+    //inyecccion de dependencias:
     private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
         this.clientRepository = clientRepository;
+        this.clientMapper = clientMapper;
     }
 
+    //servicios
+
     public Client createClient(ClientDTO clientDTO) {
-        Client client = ClientMapper.toEntity(clientDTO);
+        Client client = clientMapper.toEntity(clientDTO);
         client.setCreationDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+
         return clientRepository.save(client);
     }
 
     public ClientDTO getClientById(Long id) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException(id));
-
-        // Aquí usamos el mapper existente
-        return ClientMapper.toDto(client);
+        return clientMapper.toDto(client);
     }
 
     public Client getClientByIdOrThrow(Long id) {

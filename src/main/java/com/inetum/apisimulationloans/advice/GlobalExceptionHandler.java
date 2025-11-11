@@ -15,15 +15,15 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     //Cliente no encontrado
-    @ExceptionHandler(ClientNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleClientNotFound(ClientNotFoundException ex) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now());
-        error.put("status", HttpStatus.NOT_FOUND.value());
-        error.put("error", "Client Not Found");
-        error.put("message", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
+//    @ExceptionHandler(ClientNotFoundException.class)
+//    public ResponseEntity<Map<String, Object>> handleClientNotFound(ClientNotFoundException ex) {
+//        Map<String, Object> error = new HashMap<>();
+//        error.put("timestamp", LocalDateTime.now());
+//        error.put("status", HttpStatus.NOT_FOUND.value());
+//        error.put("error", "Client Not Found");
+//        error.put("message", ex.getMessage());
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+//    }
 
     // Errores de validación
     @ExceptionHandler(MethodArgumentNotValidException.class)
