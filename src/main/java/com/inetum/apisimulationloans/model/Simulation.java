@@ -30,7 +30,7 @@ public class Simulation {
     @JoinColumn(name = "client_id")
     private Client client;
 
-//    @OneToOne
-//    @JoinColumn(name = "loan_id")
-//    private Loan loan;
+    @OneToOne
+    @JoinColumn(name = "loan_id")
+    private Loan loan;
 }

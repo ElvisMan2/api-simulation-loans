@@ -27,7 +27,7 @@ public class Client {
     @OneToMany(mappedBy ="client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Simulation> simulations=new ArrayList<>();
 
-//    @OneToMany(mappedBy ="client", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Loan> loans=new ArrayList<>();
+    @OneToMany(mappedBy ="client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Loan> loans=new ArrayList<>();
 }
 
