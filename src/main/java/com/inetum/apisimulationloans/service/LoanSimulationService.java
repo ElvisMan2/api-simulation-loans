@@ -1,7 +1,10 @@
 package com.inetum.apisimulationloans.service;
 
+import com.inetum.apisimulationloans.dto.ClientDTO;
 import com.inetum.apisimulationloans.dto.LoanSimulationRequest;
 import com.inetum.apisimulationloans.dto.SimulationDTO;
+import com.inetum.apisimulationloans.mapper.ClientMapper;
+import com.inetum.apisimulationloans.mapper.SimulationMapper;
 import com.inetum.apisimulationloans.model.Client;
 import com.inetum.apisimulationloans.model.Simulation;
 import com.inetum.apisimulationloans.repository.ClientRepository;
@@ -20,18 +23,33 @@ public class LoanSimulationService {
 
     //inyecccion de dependencias:
     private final SimulationRepository simulationRepository;
-
     private final ClientRepository clientRepository;
 
-    public LoanSimulationService(SimulationRepository simulationRepository, ClientRepository clientRepository) {
+    private final SimulationMapper simulationMapper;
+    private final ClientMapper clientMapper;
+
+    public LoanSimulationService(SimulationRepository simulationRepository,
+                                 ClientRepository clientRepository,
+                                 SimulationMapper simulationMapper,
+                                 ClientMapper clientMapper) {
         this.simulationRepository = simulationRepository;
         this.clientRepository = clientRepository;
+        this.simulationMapper = simulationMapper;
+        this.clientMapper = clientMapper;
     }
 
 
     //servicios
 
-    public SimulationDTO simulateAndSave(Client client, LoanSimulationRequest request) {
+    public SimulationDTO simulateAndSave(Long clientId, LoanSimulationRequest request) {
+
+        //se obtiene el cliente de la base de datos
+        Client client= clientRepository.findById(clientId)
+                .orElseThrow(() -> new NoSuchElementException("Client not found with ID: " + clientId));
+
+        ClientDTO clientDTO = clientMapper.toDto(client);
+
+        //se obtiene los datos de la simulacion
         double loanAmount = request.getLoanAmount();
         double annualRate = request.getInterestRate();
         int term = request.getTerm();
@@ -48,7 +66,7 @@ public class LoanSimulationService {
         BigDecimal totalPayment = BigDecimal.valueOf(rawTotalPayment)
                 .setScale(2, RoundingMode.HALF_UP);
 
-        double maxAffordable = client.getMonthlyIncome() * 0.4;
+        double maxAffordable = clientDTO.getMonthlyIncome() * 0.5;
         boolean approved = monthlyPayment.doubleValue() <= maxAffordable;
 
         // Guardar en base de datos
@@ -65,20 +83,7 @@ public class LoanSimulationService {
 
         Simulation saved = simulationRepository.save(sim);
 
-        // Convertir a DTO para devolver
-        SimulationDTO dto = new SimulationDTO();
-        dto.setId(saved.getSimulationId());
-        dto.setLoanAmount(saved.getLoanAmount());
-        dto.setCurrency(saved.getCurrency());
-        dto.setInterestRate(saved.getInterestRate());
-        dto.setTerm(saved.getTerm());
-        dto.setMonthlyPayment(saved.getInstallment());
-        dto.setTotalPayment(saved.getTotalPayment());
-        dto.setApproved(saved.getAcceptance());
-        dto.setCreatedAt(saved.getSimulationDate());
-        dto.setClientId(client.getClientId());
-
-        return dto;
+        return simulationMapper.toDto(saved);
     }
 
     public List<SimulationDTO> getSimulationsByClientId(Long clientId) {

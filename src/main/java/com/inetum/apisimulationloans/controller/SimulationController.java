@@ -1,9 +1,8 @@
 package com.inetum.apisimulationloans.controller;
 
+import com.inetum.apisimulationloans.dto.ClientDTO;
 import com.inetum.apisimulationloans.dto.LoanSimulationRequest;
-import com.inetum.apisimulationloans.dto.LoanSimulationResponse;
 import com.inetum.apisimulationloans.dto.SimulationDTO;
-import com.inetum.apisimulationloans.model.Client;
 import com.inetum.apisimulationloans.service.ClientService;
 import com.inetum.apisimulationloans.service.LoanSimulationService;
 import jakarta.validation.Valid;
@@ -135,8 +134,7 @@ public class SimulationController {
             @PathVariable Long clientId,
             @Valid @RequestBody LoanSimulationRequest request) {
 
-        Client client = clientService.getClientByIdOrThrow(clientId);
-        SimulationDTO response = loanSimulationService.simulateAndSave(client, request);
+        SimulationDTO response = loanSimulationService.simulateAndSave(clientId, request);
         return ResponseEntity.ok(response);
     }
 

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.NoSuchElementException;
 
 @Service
 public class ClientService {
@@ -25,11 +24,12 @@ public class ClientService {
 
     //servicios
 
-    public Client createClient(ClientDTO clientDTO) {
-        Client client = clientMapper.toEntity(clientDTO);
+    public ClientDTO createClient(ClientDTO clientDTO) {
+
+        Client client = clientMapper.toEntity(clientDTO);//lo convierto a entidad
         client.setCreationDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
-        return clientRepository.save(client);
+        return clientMapper.toDto(clientRepository.save(client));
     }
 
     public ClientDTO getClientById(Long id) {
@@ -37,13 +37,6 @@ public class ClientService {
                 .orElseThrow(() -> new ClientNotFoundException(id));
         return clientMapper.toDto(client);
     }
-
-    public Client getClientByIdOrThrow(Long id) {
-        return clientRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Client not found with id: " + id));
-    }
-
-
 }
 
 
