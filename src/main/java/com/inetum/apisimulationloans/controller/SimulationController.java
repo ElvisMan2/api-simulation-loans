@@ -1,8 +1,7 @@
 package com.inetum.apisimulationloans.controller;
 
-import com.inetum.apisimulationloans.dto.ClientDTO;
-import com.inetum.apisimulationloans.dto.LoanSimulationRequest;
-import com.inetum.apisimulationloans.dto.SimulationDTO;
+import com.inetum.apisimulationloans.dto.SimulationRequest;
+import com.inetum.apisimulationloans.dto.SimulationResponse;
 import com.inetum.apisimulationloans.service.ClientService;
 import com.inetum.apisimulationloans.service.LoanSimulationService;
 import jakarta.validation.Valid;
@@ -130,17 +129,29 @@ public class SimulationController {
     }
 
     @PostMapping("/client/{clientId}")
-    public ResponseEntity<SimulationDTO> simulateLoanAndSave(
+    public List<Object> simulateLoanAndSave(
             @PathVariable Long clientId,
-            @Valid @RequestBody LoanSimulationRequest request) {
+            @Valid @RequestBody SimulationRequest request) {
 
-        SimulationDTO response = loanSimulationService.simulateAndSave(clientId, request);
-        return ResponseEntity.ok(response);
+        SimulationResponse sim = loanSimulationService.simulateAndSave(clientId, request);
+
+        List<Object> response = new ArrayList<>();
+
+        if(sim.getApproved()){
+            response.add("Loan simulation approved");
+        }
+        else {
+            response.add("Loan simulation not approved");
+        }
+
+        response.add(sim);
+
+        return response;
     }
 
     @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<SimulationDTO>> getSimulationsByClientId(@PathVariable Long clientId) {
-        List<SimulationDTO> simulations = loanSimulationService.getSimulationsByClientId(clientId);
+    public ResponseEntity<List<SimulationResponse>> getSimulationsByClientId(@PathVariable Long clientId) {
+        List<SimulationResponse> simulations = loanSimulationService.getSimulationsByClientId(clientId);
         return ResponseEntity.ok(simulations);
     }
 

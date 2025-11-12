@@ -1,6 +1,6 @@
 package com.inetum.apisimulationloans.mapper;
 
-import com.inetum.apisimulationloans.dto.SimulationDTO;
+import com.inetum.apisimulationloans.dto.SimulationResponse;
 import com.inetum.apisimulationloans.model.Simulation;
 
 import org.mapstruct.Mapper;
@@ -14,12 +14,12 @@ public interface SimulationMapper {
     @Mapping(source = "approved", target = "acceptance")
     @Mapping(source = "createdAt", target = "simulationDate")
     @Mapping(source = "clientId", target = "client.clientId")
-    Simulation toEntity(SimulationDTO dto);
+    Simulation toEntity(SimulationResponse dto);
 
     @Mapping(source = "simulationId", target = "id")
     @Mapping(source = "installment", target = "monthlyPayment")
     @Mapping(source = "acceptance", target = "approved")
     @Mapping(source = "simulationDate", target = "createdAt")
     @Mapping(source = "client.clientId", target = "clientId")
-    SimulationDTO toDto(Simulation entity);
+    SimulationResponse toDto(Simulation entity);
 }

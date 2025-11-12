@@ -7,6 +7,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/clients")
@@ -29,10 +32,11 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody ClientDTO clientDTO) {
-
-        return ResponseEntity.ok(clientService.createClient(clientDTO));
-
+    public List<Object> createClient(@Valid @RequestBody ClientDTO clientDTO) {
+        List<Object> response = new ArrayList<>();
+        response.add("User created successfully");
+        response.add(clientService.createClient(clientDTO));
+        return response;
     }
 }
 

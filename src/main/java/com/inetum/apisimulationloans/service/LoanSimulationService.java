@@ -1,8 +1,8 @@
 package com.inetum.apisimulationloans.service;
 
 import com.inetum.apisimulationloans.dto.ClientDTO;
-import com.inetum.apisimulationloans.dto.LoanSimulationRequest;
-import com.inetum.apisimulationloans.dto.SimulationDTO;
+import com.inetum.apisimulationloans.dto.SimulationRequest;
+import com.inetum.apisimulationloans.dto.SimulationResponse;
 import com.inetum.apisimulationloans.mapper.ClientMapper;
 import com.inetum.apisimulationloans.mapper.SimulationMapper;
 import com.inetum.apisimulationloans.model.Client;
@@ -41,7 +41,7 @@ public class LoanSimulationService {
 
     //servicios
 
-    public SimulationDTO simulateAndSave(Long clientId, LoanSimulationRequest request) {
+    public SimulationResponse simulateAndSave(Long clientId, SimulationRequest request) {
 
         //se obtiene el cliente de la base de datos
         Client client= clientRepository.findById(clientId)
@@ -86,14 +86,14 @@ public class LoanSimulationService {
         return simulationMapper.toDto(saved);
     }
 
-    public List<SimulationDTO> getSimulationsByClientId(Long clientId) {
+    public List<SimulationResponse> getSimulationsByClientId(Long clientId) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new NoSuchElementException("Client not found with ID: " + clientId));
 
         return client.getSimulations()
                 .stream()
                 .map(sim -> {
-                    SimulationDTO dto = new SimulationDTO();
+                    SimulationResponse dto = new SimulationResponse();
                     dto.setId(sim.getSimulationId());
                     dto.setLoanAmount(sim.getLoanAmount());
                     dto.setCurrency(sim.getCurrency());
