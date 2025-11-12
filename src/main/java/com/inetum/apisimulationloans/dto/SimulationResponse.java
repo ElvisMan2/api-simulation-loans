@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SimulationResponse {
-    private Long id;
+    private Long simulationId;
     private Double loanAmount;
     private String currency;
     private Double interestRate;

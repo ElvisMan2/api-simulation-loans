@@ -94,7 +94,7 @@ public class LoanSimulationService {
                 .stream()
                 .map(sim -> {
                     SimulationResponse dto = new SimulationResponse();
-                    dto.setId(sim.getSimulationId());
+                    dto.setSimulationId(sim.getSimulationId());
                     dto.setLoanAmount(sim.getLoanAmount());
                     dto.setCurrency(sim.getCurrency());
                     dto.setInterestRate(sim.getInterestRate());
