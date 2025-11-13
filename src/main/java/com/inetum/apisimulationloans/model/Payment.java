@@ -15,11 +15,12 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSchedule {
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long installmentId;
 
+    private Integer paymentNumber;
     private String currency; // "peruvian soles"
     private Double installment;
     private Double amortization;

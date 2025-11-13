@@ -31,5 +31,5 @@ public class Loan {
     private Simulation simulation;
 
     @OneToMany(mappedBy ="loan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PaymentSchedule> paymentSchedule = new ArrayList<>();
+    private List<Payment> payment = new ArrayList<>();
 }
