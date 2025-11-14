@@ -1,0 +1,1 @@
+mvn clean verify sonar:sonar -Dsonar.projectKey=simulation-loans -Dsonar.host.url=http://localhost:9000 -Dsonar.login=sqp_be491fa042501893c6950f830322895036d0ef8e
