@@ -1,8 +1,11 @@
 package com.inetum.apisimulationloans.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,10 @@ public class Loan {
     private Integer term; // months
     private Double installment;
     private Integer status; // 1: active, 0: inactive
+    private String Currency; // "soles"
+    private LocalDateTime creationDate;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate disbursementDate;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
