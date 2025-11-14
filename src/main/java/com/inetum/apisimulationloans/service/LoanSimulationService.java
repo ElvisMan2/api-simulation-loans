@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -54,6 +55,7 @@ public class LoanSimulationService {
         double annualRate = request.getInterestRate();
         int term = request.getTerm();
         double monthlyRate = annualRate / 12 / 100;
+        LocalDate disbursementDate=request.getDisbursementDate();
 
         double numerator = monthlyRate * Math.pow(1 + monthlyRate, term);
         double denominator = Math.pow(1 + monthlyRate, term) - 1;
@@ -80,6 +82,7 @@ public class LoanSimulationService {
         sim.setAcceptance(approved);
         sim.setSimulationDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         sim.setClient(client);
+        sim.setDisbursementDate(disbursementDate);
 
         Simulation saved = simulationRepository.save(sim);
 
@@ -92,20 +95,7 @@ public class LoanSimulationService {
 
         return client.getSimulations()
                 .stream()
-                .map(sim -> {
-                    SimulationResponse dto = new SimulationResponse();
-                    dto.setSimulationId(sim.getSimulationId());
-                    dto.setLoanAmount(sim.getLoanAmount());
-                    dto.setCurrency(sim.getCurrency());
-                    dto.setInterestRate(sim.getInterestRate());
-                    dto.setTerm(sim.getTerm());
-                    dto.setMonthlyPayment(sim.getInstallment());
-                    dto.setTotalPayment(sim.getTotalPayment());
-                    dto.setApproved(sim.getAcceptance());
-                    dto.setCreatedAt(sim.getSimulationDate());
-                    dto.setClientId(client.getClientId());
-                    return dto;
-                })
+                .map(simulationMapper::toDto)
                 .toList();
     }
 

@@ -7,6 +7,8 @@ import com.inetum.apisimulationloans.service.LoanSimulationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -132,6 +134,10 @@ public class SimulationController {
     public List<Object> simulateLoanAndSave(
             @PathVariable Long clientId,
             @Valid @RequestBody SimulationRequest request) {
+
+        if(request.getDisbursementDate().isBefore(LocalDate.now())){
+            throw new IllegalArgumentException("Disbursement date cannot be before today");
+        }
 
         SimulationResponse sim = loanSimulationService.simulateAndSave(clientId, request);
 
