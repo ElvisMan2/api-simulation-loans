@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class LoanSimulationService {
+public class SimulationService {
 
     //inyecccion de dependencias:
     private final SimulationRepository simulationRepository;
@@ -29,10 +29,10 @@ public class LoanSimulationService {
     private final SimulationMapper simulationMapper;
     private final ClientMapper clientMapper;
 
-    public LoanSimulationService(SimulationRepository simulationRepository,
-                                 ClientRepository clientRepository,
-                                 SimulationMapper simulationMapper,
-                                 ClientMapper clientMapper) {
+    public SimulationService(SimulationRepository simulationRepository,
+                             ClientRepository clientRepository,
+                             SimulationMapper simulationMapper,
+                             ClientMapper clientMapper) {
         this.simulationRepository = simulationRepository;
         this.clientRepository = clientRepository;
         this.simulationMapper = simulationMapper;
@@ -42,7 +42,7 @@ public class LoanSimulationService {
 
     //servicios
 
-    public SimulationResponse simulateAndSave(Long clientId, SimulationRequest request) {
+    public SimulationResponse createSimulation(Long clientId, SimulationRequest request) {
 
         //se obtiene el cliente de la base de datos
         Client client= clientRepository.findById(clientId)
