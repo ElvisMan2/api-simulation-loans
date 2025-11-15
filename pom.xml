@@ -113,8 +113,7 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
-            <!-- ✅ Plugin de Spring Boot -->
+            <!-- Plugin de Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -157,6 +156,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

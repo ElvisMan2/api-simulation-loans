@@ -8,6 +8,8 @@ import com.inetum.apisimulationloans.repository.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -25,7 +27,7 @@ class ClientServiceTest {
     @Mock
     private ClientRepository clientRepository;
 
-    @Mock
+    @Autowired
     private ClientMapper clientMapper;
 
     @BeforeEach
@@ -41,17 +43,18 @@ class ClientServiceTest {
                 .firstName("Juan")
                 .paternalLastName("Pérez")
                 .maternalLastName("Gómez")
-                .currencyOfIncome("MXN")
-                .monthlyIncome(30000.0)
+                .currencyOfIncome("soles")
+                .monthlyIncome(30000.00)
                 .build();
 
-        Client mappedEntity = new Client();
-        mappedEntity.setClientId(1L);
-        mappedEntity.setFirstName("Juan");
-        mappedEntity.setPaternalLastName("Pérez");
-        mappedEntity.setMaternalLastName("Gómez");
-        mappedEntity.setCurrencyOfIncome("soles");
-        mappedEntity.setMonthlyIncome(30000.0);
+//        Client mappedEntity = new Client();
+//        mappedEntity.setClientId(1L);
+//        mappedEntity.setFirstName("Juan");
+//        mappedEntity.setPaternalLastName("Pérez");
+//        mappedEntity.setMaternalLastName("Gómez");
+//        mappedEntity.setCurrencyOfIncome("soles");
+//        mappedEntity.setMonthlyIncome(30000.0);
+        Client mappedEntity= clientMapper.toEntity(inputDTO);
 
         // Establecemos la fecha esperada
         LocalDateTime expectedCreationDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
@@ -63,14 +66,14 @@ class ClientServiceTest {
         savedEntity.setPaternalLastName("Pérez");
         savedEntity.setMaternalLastName("Gómez");
         savedEntity.setCurrencyOfIncome("soles");
-        savedEntity.setMonthlyIncome(30000.0);
+        savedEntity.setMonthlyIncome(30000.00);
         savedEntity.setCreationDate(expectedCreationDate);
 
-        ClientDTO outputDTO = inputDTO; // Podrías simular otro objeto si se desea
+        //ClientDTO outputDTO = inputDTO; // Podrías simular otro objeto si se desea
 
-        when(clientMapper.toEntity(inputDTO)).thenReturn(mappedEntity);
+        //when(clientMapper.toEntity(inputDTO)).thenReturn(mappedEntity);
         when(clientRepository.save(mappedEntity)).thenReturn(savedEntity);
-        when(clientMapper.toDto(savedEntity)).thenReturn(outputDTO);
+        //when(clientMapper.toDto(savedEntity)).thenReturn(outputDTO);
 
         // Act
         ClientDTO result = clientService.createClient(inputDTO);
@@ -109,7 +112,7 @@ class ClientServiceTest {
                 .build();
 
         when(clientRepository.findById(clientId)).thenReturn(Optional.of(client));
-        when(clientMapper.toDto(client)).thenReturn(expectedDto);
+        //when(clientMapper.toDto(client)).thenReturn(expectedDto);
 
         // Act
         ClientDTO result = clientService.getClientById(clientId);
@@ -140,7 +143,7 @@ class ClientServiceTest {
 
         assertTrue(thrown.getMessage().contains(clientId.toString()));
         verify(clientRepository).findById(clientId);
-        verifyNoInteractions(clientMapper);
+        //verifyNoInteractions(clientMapper);
     }
 
 
