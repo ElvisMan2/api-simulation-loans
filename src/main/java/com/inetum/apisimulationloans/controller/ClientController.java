@@ -1,7 +1,6 @@
 package com.inetum.apisimulationloans.controller;
 
 import com.inetum.apisimulationloans.dto.ClientDTO;
-import com.inetum.apisimulationloans.model.Client;
 import com.inetum.apisimulationloans.service.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

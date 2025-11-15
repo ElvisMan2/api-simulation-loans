@@ -11,7 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -74,5 +73,29 @@ class ClientControllerTest {
                 .andExpect(jsonPath("$[1].clientId").value(2L))
                 .andExpect(jsonPath("$[1].firstName").value("Luis"))
                 .andExpect(jsonPath("$[1].monthlyIncome").value(40000.0));
+    }
+
+    @Test
+    void testHandleGeneralException_returnsInternalServerError() throws Exception {
+        // Arrange: DTO válido pero el servicio lanza una excepción general
+        ClientDTO inputDTO = ClientDTO.builder()
+                .clientId(3L)
+                .firstName("Carlos")
+                .paternalLastName("Perez")
+                .maternalLastName("Gomez")
+                .currencyOfIncome("USD")
+                .monthlyIncome(30000.0)
+                .build();
+
+        when(clientService.createClient(Mockito.any(ClientDTO.class)))
+                .thenThrow(new RuntimeException("Unexpected failure"));
+
+        // Act & Assert
+        mockMvc.perform(post("/api/clients")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(inputDTO)))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.error").value("Internal Server Error"))
+                .andExpect(jsonPath("$.message").value("Unexpected failure"));
     }
 }
