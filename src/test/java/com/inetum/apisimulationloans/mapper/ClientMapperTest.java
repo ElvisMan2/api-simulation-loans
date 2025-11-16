@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClientMapperTest {
+class ClientMapperTest {
 
 	private final ClientMapper mapper = Mappers.getMapper(ClientMapper.class);
 

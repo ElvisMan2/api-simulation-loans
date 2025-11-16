@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,8 +40,6 @@ class SimulationControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Test
     void testSimulateLoanAndSave_approved() throws Exception {

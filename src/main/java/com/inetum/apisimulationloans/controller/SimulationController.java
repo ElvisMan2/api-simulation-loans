@@ -19,11 +19,10 @@ public class SimulationController {
     //Endpoints reales
 
     //inyeccion de dependencias:
-    private final ClientService clientService;
     private final SimulationService simulationService;
 
-    public SimulationController(ClientService clientService, SimulationService simulationService) {
-        this.clientService = clientService;
+    public SimulationController(SimulationService simulationService) {
+
         this.simulationService = simulationService;
     }
 
