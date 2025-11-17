@@ -55,7 +55,7 @@ class SimulationServiceTest {
     }
 
     @Test
-    void testGetSimulationsByClientId_whenClientExists_returnsMappedResponses() {
+    void testGetSimulationsByClientId_success() {
         // Arrange
         Long clientId = 1L;
         Client client = new Client();
@@ -108,7 +108,7 @@ class SimulationServiceTest {
     }
 
     @Test
-    void testGetSimulationsByClientId_whenClientDoesNotExist_throwsException() {
+    void testGetSimulationsByClientId_whenClientDoesNotExist() {
         // Arrange
         Long clientId = 999L;
         when(clientRepository.findById(clientId)).thenReturn(Optional.empty());

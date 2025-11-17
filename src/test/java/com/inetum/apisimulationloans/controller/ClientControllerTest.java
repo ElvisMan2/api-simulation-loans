@@ -28,30 +28,7 @@ class ClientControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void testGetClientById_returnsClientDTO() throws Exception {
-        // Arrange
-        Long clientId = 1L;
-        ClientDTO dto = ClientDTO.builder()
-                .clientId(clientId)
-                .firstName("Ana")
-                .paternalLastName("Ramirez")
-                .maternalLastName("Torres")
-                .currencyOfIncome("USD")
-                .monthlyIncome(50000.0)
-                .build();
-
-        when(clientService.getClientById(clientId)).thenReturn(dto);
-
-        // Act & Assert
-        mockMvc.perform(get("/api/clients/{id}", clientId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.clientId").value(clientId))
-                .andExpect(jsonPath("$.firstName").value("Ana"))
-                .andExpect(jsonPath("$.monthlyIncome").value(50000.0));
-    }
-
-    @Test
-    void testCreateClient_returnsResponseList() throws Exception {
+    void testCreateClient() throws Exception {
         // Arrange
         ClientDTO inputDTO = ClientDTO.builder()
                 .clientId(2L)
@@ -76,7 +53,30 @@ class ClientControllerTest {
     }
 
     @Test
-    void testHandleGeneralException_returnsInternalServerError() throws Exception {
+    void testGetClientById() throws Exception {
+        // Arrange
+        Long clientId = 1L;
+        ClientDTO dto = ClientDTO.builder()
+                .clientId(clientId)
+                .firstName("Ana")
+                .paternalLastName("Ramirez")
+                .maternalLastName("Torres")
+                .currencyOfIncome("USD")
+                .monthlyIncome(50000.0)
+                .build();
+
+        when(clientService.getClientById(clientId)).thenReturn(dto);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/clients/{id}", clientId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.clientId").value(clientId))
+                .andExpect(jsonPath("$.firstName").value("Ana"))
+                .andExpect(jsonPath("$.monthlyIncome").value(50000.0));
+    }
+
+    @Test
+    void testHandleGeneralException() throws Exception {
         // Arrange: DTO válido pero el servicio lanza una excepción general
         ClientDTO inputDTO = ClientDTO.builder()
                 .clientId(3L)
