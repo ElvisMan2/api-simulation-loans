@@ -145,13 +145,8 @@
                         <!-- DTOs -->
                         <exclude>com/inetum/apisimulationloans/dto/**</exclude>
 
-                         Entities / Models JPA
+                        <!--Entities / Models JPA-->
                         <exclude>com/inetum/apisimulationloans/model/**</exclude>
-
-                        <!-- MapStruct (interfaces & generated implementations) -->
-<!--                        <exclude>com/inetum/apisimulationloans/mapper/**</exclude>-->
-<!--                        <exclude>**/*Mapper.class</exclude>-->
-<!--                        <exclude>**/*MapperImpl.class</exclude>-->
 
                         <!-- Opcional: Clase principal -->
                         <exclude>**/*Application.class</exclude>

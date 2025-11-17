@@ -53,10 +53,4 @@ class ClientMapperTest {
 		assertThat(dto.getCurrencyOfIncome()).isEqualTo(entity.getCurrencyOfIncome());
 		assertThat(dto.getMonthlyIncome()).isEqualTo(entity.getMonthlyIncome());
 	}
-
-//	@Test
-//	void nullMapping_shouldReturnNull() {
-//		assertThat(mapper.toEntity(null)).isNull();
-//		assertThat(mapper.toDto(null)).isNull();
-//	}
 }

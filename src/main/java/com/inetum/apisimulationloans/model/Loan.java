@@ -25,7 +25,7 @@ public class Loan {
     private Integer term; // months
     private Double installment;
     private Integer status; // 1: active, 0: inactive
-    private String Currency; // "soles"
+    private String currency; // "soles"
     private LocalDateTime creationDate;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate disbursementDate;
