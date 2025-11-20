@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 public class ClientService {
@@ -37,6 +38,15 @@ public class ClientService {
                 .orElseThrow(() -> new ClientNotFoundException(id));
         return clientMapper.toDto(client);
     }
+
+    public boolean existsClientByNames(String firstName, String paternalLastName, String maternalLastName) {
+            return clientRepository.existsByFirstNameAndPaternalLastNameAndMaternalLastName(firstName, paternalLastName, maternalLastName);
+    }
+
+    // Nuevo método: obtener cliente por nombres y devolver su DTO (o null si no existe)
+    public ClientDTO getClientByNames(String firstName, String paternalLastName, String maternalLastName) {
+        Optional<Client> opt = clientRepository.findByFirstNameAndPaternalLastNameAndMaternalLastName(firstName, paternalLastName, maternalLastName);
+        return opt.map(clientMapper::toDto).orElse(null);
+    }
+
 }
-
-
