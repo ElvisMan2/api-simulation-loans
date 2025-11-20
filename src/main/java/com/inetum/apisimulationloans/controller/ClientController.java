@@ -37,12 +37,12 @@ public class ClientController {
     public ResponseEntity<?> createClient(@Valid @RequestBody ClientDTO clientDTO) {
 
         if(clientService.existsClientByNames(clientDTO.getFirstName(), clientDTO.getPaternalLastName(), clientDTO.getMaternalLastName())) {
-            // Si ya existe, devolver el arreglo solicitado con el DTO existente
+            // Si ya existe, devolver el arreglo solicitado con el DTO existente y código 200
             ClientDTO existing = clientService.getClientByNames(clientDTO.getFirstName(), clientDTO.getPaternalLastName(), clientDTO.getMaternalLastName());
             List<Object> response = new ArrayList<>();
             response.add("User already exist");
             response.add(existing);
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            return ResponseEntity.ok(response);
         }else {
             List<Object> response = new ArrayList<>();
             response.add("User created successfully");
